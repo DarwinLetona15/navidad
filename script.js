@@ -60,12 +60,20 @@ if (autoRotate) {
 
 // Play background music if bgMusicURL is provided
 if (bgMusicURL) {
-  document.getElementById('music-container').innerHTML += `
-    <audio src="${bgMusicURL}" ${bgMusicControls ? 'controls' : ''} autoplay loop>    
-      <p>If you are reading this, it is because your browser does not support the audio element.</p>
-    </audio>
-  `;
+  var audioElement = document.createElement('audio');
+  audioElement.src = bgMusicURL;
+  audioElement.loop = true;
+  if (bgMusicControls) {
+    audioElement.controls = true;
+  }
+  document.getElementById('music-container').appendChild(audioElement);
+
+  // Intenta reproducir el audio automáticamente
+  audioElement.play().catch(function() {
+    console.log('La reproducción automática fue bloqueada. El usuario debe interactuar con la página.');
+  });
 }
+
 
 // setup events
 document.onpointerdown = function (e) {
